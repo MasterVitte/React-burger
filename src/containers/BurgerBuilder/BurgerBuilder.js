@@ -66,12 +66,22 @@ const BurgerBuilder = () => {
         updatePurchaseState(updatedIngredients);
     };
 
+    const disabledInfo = {
+        ...state.ingredients
+    };
+    for (let key in disabledInfo) {
+        disabledInfo[key] = disabledInfo[key] <= 0
+    };
+
     return (
         <Auxiliary>
             <Burger ingredients={state.ingredients}/>
             <BuildControls
                 ingredientAdded={addIngredientHandler}
                 ingredientRemoved={removeIngredientHandler}
+                disabled={disabledInfo}
+                purchasable={state.purchasable}
+                price={state.totalPrice}
             />
         </Auxiliary>
     );
