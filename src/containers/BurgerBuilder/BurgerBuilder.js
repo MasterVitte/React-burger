@@ -24,10 +24,37 @@ const BurgerBuilder = () => {
         purchasable: false
     });
 
+    function updatePurchaseState (ingredients) {
+        const sum = Object.keys(ingredients)
+            .map(igKey => {
+                return ingredients[igKey];
+            })
+            .reduce((sum, el) => {
+                return sum + el;
+            }, 0);
+        setState(prevState => ({...prevState, purchasable: sum > 0}));
+    };
+
+    let addIngredientHandler = (type) => {
+        const oldCount = state.ingredients[type];
+        const updatedCount = oldCount + 1;
+        const updatedIngredients = {
+            ...state.ingredients
+        };
+        updatedIngredients[type] = updatedCount;
+        const priceAddition = INGREDIENT_PRICES[type];
+        const oldPrice = state.totalPrice;
+        const newPrice = oldPrice + priceAddition;
+        setState(prevState => ({...prevState, totalPrice: newPrice, ingredients: updatedIngredients}));
+        updatePurchaseState(updatedIngredients);
+    };
+
     return (
         <Auxiliary>
             <Burger ingredients={state.ingredients}/>
-            <BuildControls />
+            <BuildControls
+                ingredientAdded={addIngredientHandler}
+            />
         </Auxiliary>
     );
 };
