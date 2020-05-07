@@ -4,7 +4,9 @@ import Auxiliary from '../../hoc/Auxiliary'
 
 const BurgerBuilder = () => {
     return (
-        <Auxiliary />
+        <Auxiliary>
+            <div>BurgerBuilder</div>
+        </Auxiliary>
     );
 };
 
