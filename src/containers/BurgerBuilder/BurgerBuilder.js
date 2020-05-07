@@ -49,11 +49,29 @@ const BurgerBuilder = () => {
         updatePurchaseState(updatedIngredients);
     };
 
+    let removeIngredientHandler = (type) => {
+        const oldCount = state.ingredients[type];
+        if (oldCount <= 0) {
+            return;
+        }
+        const updatedCount = oldCount - 1;
+        const updatedIngredients = {
+            ...state.ingredients
+        };
+        updatedIngredients[type] = updatedCount;
+        const priceDeduction = INGREDIENT_PRICES[type];
+        const oldPrice = state.totalPrice;
+        const newPrice = oldPrice - priceDeduction;
+        setState({totalPrice: newPrice, ingredients: updatedIngredients});
+        updatePurchaseState(updatedIngredients);
+    };
+
     return (
         <Auxiliary>
             <Burger ingredients={state.ingredients}/>
             <BuildControls
                 ingredientAdded={addIngredientHandler}
+                ingredientRemoved={removeIngredientHandler}
             />
         </Auxiliary>
     );
