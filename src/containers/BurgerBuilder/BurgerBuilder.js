@@ -2,6 +2,7 @@ import React, {useState} from "react";
 
 import Auxiliary from '../../hoc/Auxiliary'
 import Burger from '../../components/Burger/Burger'
+import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -26,6 +27,7 @@ const BurgerBuilder = () => {
     return (
         <Auxiliary>
             <Burger ingredients={state.ingredients}/>
+            <BuildControls />
         </Auxiliary>
     );
 };
