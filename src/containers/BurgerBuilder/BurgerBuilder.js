@@ -77,6 +77,10 @@ const BurgerBuilder = () => {
         setState(prevState => ({...prevState, purchasing: false}));
     };
 
+    let purchaseContinueHandler = () => {
+        alert('You confirmed!');
+    };
+
     const disabledInfo = {
         ...state.ingredients
     };
@@ -86,8 +90,15 @@ const BurgerBuilder = () => {
 
     return (
         <Auxiliary>
-            <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
-                <OrderSummary ingredients={state.ingredients} />
+            <Modal
+                show={state.purchasing}
+                modalClosed={purchaseCancelHandler}
+            >
+                <OrderSummary
+                    ingredients={state.ingredients}
+                    purchaseCanceled={purchaseCancelHandler}
+                    purchaseContinued={purchaseContinueHandler}
+                />
             </Modal>
             <Burger ingredients={state.ingredients}/>
             <BuildControls
