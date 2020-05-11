@@ -96,6 +96,7 @@ const BurgerBuilder = () => {
             >
                 <OrderSummary
                     ingredients={state.ingredients}
+                    price={state.totalPrice}
                     purchaseCanceled={purchaseCancelHandler}
                     purchaseContinued={purchaseContinueHandler}
                 />
