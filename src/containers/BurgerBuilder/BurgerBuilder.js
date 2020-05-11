@@ -23,7 +23,8 @@ const BurgerBuilder = () => {
             meat: 0
         },
         totalPrice: 0,
-        purchasable: false
+        purchasable: false,
+        purchasing: false
     });
 
     function updatePurchaseState (ingredients) {
@@ -68,6 +69,14 @@ const BurgerBuilder = () => {
         updatePurchaseState(updatedIngredients);
     };
 
+    let purchaseHandler = () => {
+        setState(prevState => ({...prevState, purchasing: true}));
+    };
+
+    let purchaseCancelHandler = () => {
+        setState(prevState => ({...prevState, purchasing: false}));
+    };
+
     const disabledInfo = {
         ...state.ingredients
     };
@@ -77,7 +86,7 @@ const BurgerBuilder = () => {
 
     return (
         <Auxiliary>
-            <Modal>
+            <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
                 <OrderSummary ingredients={state.ingredients} />
             </Modal>
             <Burger ingredients={state.ingredients}/>
@@ -87,6 +96,7 @@ const BurgerBuilder = () => {
                 disabled={disabledInfo}
                 purchasable={state.purchasable}
                 price={state.totalPrice}
+                ordered={purchaseHandler}
             />
         </Auxiliary>
     );
