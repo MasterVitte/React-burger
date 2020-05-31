@@ -1,0 +1,36 @@
+.Loader {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Loader div :global {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 0.3rem solid #979fd0;
+    animation: 1.5s ripple infinite;
+}
+
+.Loader div :global {
+    animation: 1.5s ripple infinite;
+}
+
+@keyframes :global(ripple) {
+    from {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.Loader div:nth-child(2) {
+     animation-delay: 0.5s;
+ }
