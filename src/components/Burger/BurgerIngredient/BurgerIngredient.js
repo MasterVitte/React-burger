@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import classes from './BurgerIndredient.css'
 
-const burgerIndredient = (props) => {
+const BurgerIndredient = (props) => {
     let ingredient = null;
 
     switch (props.type) {
@@ -37,8 +37,8 @@ const burgerIndredient = (props) => {
     return ingredient;
 };
 
-burgerIndredient.propTypes = {
+BurgerIndredient.propTypes = {
     type: PropTypes.string.isRequired
 }
 
-export default burgerIndredient;
+export default BurgerIndredient;

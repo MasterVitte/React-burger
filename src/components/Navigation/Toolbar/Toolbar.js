@@ -4,7 +4,7 @@ import classes from './Toolbar.css';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle';
 
-const toolbar = (props) => {
+const Toolbar = (props) => {
     return (
         <header className={classes.Toolbar}>
             <DrawerToggle clicked={props.drawerToggleClicked} />
@@ -18,4 +18,4 @@ const toolbar = (props) => {
     );
 };
 
-export default toolbar;
+export default Toolbar;
