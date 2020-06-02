@@ -92,6 +92,15 @@ const BurgerBuilder = (props) => {
         setState(prevState => ({...prevState, purchasing: false}));
     };
 
+    useEffect(() => {
+        const query = new URLSearchParams(props.location.search);
+        const ingredients = {};
+        for (let param of query.entries()) {
+            ingredients[param[0]] = +param[1]
+        }
+        setState(prevState => ({...prevState, ingredients: ingredients}))
+    }, []);
+
     let purchaseContinueHandler = () => {
         // // alert('You confirmed!');
         // setState(prevState => ({...prevState, loading: true}));
@@ -115,7 +124,16 @@ const BurgerBuilder = (props) => {
         //     .catch(error => {
         //         setState(prevState => ({...prevState, loading: false}));
         //     })
-        props.history.push('/checkout')
+        const queryParams = [];
+        for (let i in state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(state.ingredients[i]));
+        }
+        queryParams.push('price=' + state.totalPrice)
+        const queryString = queryParams.join('&');
+        props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        })
     };
 
     const disabledInfo = {
