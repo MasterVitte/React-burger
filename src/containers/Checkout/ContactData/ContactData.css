@@ -2,8 +2,5 @@
     margin: 20px auto;
     width: 80%;
     text-align: center;
-}
-
-.Input {
-    display: block;
+    border: 1px solid #ccc;
 }

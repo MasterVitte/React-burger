@@ -3,31 +3,64 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
+import Input from '../../../components/UI/Input/Input';
 
 const ContactData = (props) => {
+
     const [state, setState] = useState({
-        name: '',
-        email: '',
-        address: {
-            street: ''
+        orderForm: {
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Name'
+                },
+                value: ''
+            },
+            country: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Country'
+                },
+                value: ''
+            },
+            street: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Street'
+                },
+                value: ''
+            },
+            email: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'email',
+                    placeholder: 'Your Email'
+                },
+                value: ''
+            },
+            deliveryMethod: {
+                elementType: 'select',
+                elementConfig: {
+                    options: [
+                        {value: 'fastest', displayValue: 'Fastest'},
+                        {value: 'cheapest', displayValue: 'Cheapest'}
+                    ]
+                },
+                value: ''
+            }
         },
         loading: false
     });
 
-    function orderHandler (event) {
+    function orderHandler(event) {
         event.preventDefault();
         setState(prevState => ({...prevState, loading: true}))
         const order = {
             ingredients: props.ingredients,
-            price: props.price,
-            customer: {
-                name: 'Artem Vitte',
-                address: {
-                    street: 'Test street'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
+            price: props.price
         }
 
         axios.post('/orders.json', order)
@@ -40,17 +73,43 @@ const ContactData = (props) => {
             })
     }
 
+    function inputChangedHandler(event, inputIdentifier) {
+        const updatedOrderForm = {
+            ...state.orderForm
+        }
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        }
+        updatedFormElement.value = event.target.value
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        setState(prevState => ({...prevState, orderForm: updatedOrderForm}))
+    }
+
+    const formElementsArray = [];
+
+    for (let key in state.orderForm) {
+        formElementsArray.push({
+            id: key,
+            config: state.orderForm[key]
+        })
+    }
+
     let form = (
         <form>
-            <input className={classes.Input} type="text" name="name" placeholder="Your name"/>
-            <input className={classes.Input} type="email" name="email" placeholder="Your email"/>
-            <input className={classes.Input} type="text" name="street" placeholder="Your street"/>
+            {formElementsArray.map(formElement => (
+                <Input
+                    key={formElement.id}
+                    elementType={formElement.config.elementType}
+                    elementConfig={formElement.config.elementConfig}
+                    value={formElement.config.value}
+                    changed={(event) => inputChangedHandler(event, formElement.id)} />
+            ))}
             <Button btnType="Success" clicked={orderHandler}>ORDER</Button>
         </form>
     );
 
     if (state.loading) {
-        form = <Spinner />
+        form = <Spinner/>
     }
 
     return (
