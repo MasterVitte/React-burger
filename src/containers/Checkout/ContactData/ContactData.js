@@ -84,7 +84,8 @@ const ContactData = (props) => {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
                 },
-                value: '',
+                value: 'fastest',
+                validation: {},
                 valid: true
             }
         },
@@ -118,6 +119,10 @@ const ContactData = (props) => {
     function checkValidity(value, rules) {
 
         let isValid = true;
+
+        if (!rules) {
+            return true;
+        }
 
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
