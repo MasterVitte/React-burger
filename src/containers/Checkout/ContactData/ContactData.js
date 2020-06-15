@@ -15,7 +15,12 @@ const ContactData = (props) => {
                     type: 'text',
                     placeholder: 'Your Name'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             country: {
                 elementType: 'input',
@@ -23,7 +28,12 @@ const ContactData = (props) => {
                     type: 'text',
                     placeholder: 'Your Country'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -31,7 +41,27 @@ const ContactData = (props) => {
                     type: 'text',
                     placeholder: 'Street'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
+            },
+            zip: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'number',
+                    placeholder: 'ZIP Code'
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5
+                },
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -39,7 +69,12 @@ const ContactData = (props) => {
                     type: 'email',
                     placeholder: 'Your Email'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -49,9 +84,11 @@ const ContactData = (props) => {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
                 },
-                value: ''
+                value: '',
+                valid: true
             }
         },
+        formIsValid: false,
         loading: false
     });
 
@@ -78,6 +115,25 @@ const ContactData = (props) => {
             })
     }
 
+    function checkValidity(value, rules) {
+
+        let isValid = true;
+
+        if (rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if (rules.minLength) {
+            isValid = value.length <= rules.minLength
+        }
+
+        if (rules.maxLength) {
+            isValid = value.length <= rules.maxLength
+        }
+
+        return isValid;
+    }
+
     const inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {
             ...state.orderForm
@@ -85,9 +141,16 @@ const ContactData = (props) => {
         const updatedFormElement = {
             ...updatedOrderForm[inputIdentifier]
         }
-        updatedFormElement.value = event.target.value
+        updatedFormElement.value = event.target.value;
+        updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
-        setState(prevState => ({...prevState, orderForm: updatedOrderForm}))
+
+        let formIsValid = true;
+        for (let inputIdentifiers in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifiers].valid && formIsValid
+        }
+        setState(prevState => ({...prevState, orderForm: updatedOrderForm, formIsValid: formIsValid}))
     }
 
     const formElementsArray = [];
@@ -107,9 +170,12 @@ const ContactData = (props) => {
                     elementType={formElement.config.elementType}
                     elementConfig={formElement.config.elementConfig}
                     value={formElement.config.value}
+                    invalid={!formElement.config.valid}
+                    shouldValidate={formElement.config.validation}
+                    touched={formElement.config.touched}
                     changed={(event) => inputChangedHandler(event, formElement.id)} />
             ))}
-            <Button btnType="Success" clicked={orderHandler}>ORDER</Button>
+            <Button btnType="Success" clicked={orderHandler} disabled={!state.formIsValid}>ORDER</Button>
         </form>
     );
 
